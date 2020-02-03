@@ -51,7 +51,7 @@ TEST(lagrange_base, verify_lagrange_base_transformation)
     }
     barretenberg::polynomial lagrange_base_polynomial(test_polynomial);
 
-    test_polynomial.ifft(domain);
+    lagrange_base_polynomial.fft(domain);
     scalar_multiplication::generate_pippenger_point_table(&monomial_srs[0], &monomial_srs[0], degree);
     scalar_multiplication::generate_pippenger_point_table(&lagrange_base_srs[0], &lagrange_base_srs[0], degree);
 
