@@ -41,21 +41,21 @@ inline Verifier preprocess(const Prover& prover)
 
     Verifier verifier(prover.n);
 
-    barretenberg::g1::jacobian_to_affine(barretenberg::scalar_multiplication::pippenger(
+    barretenberg::g1::__jacobian_to_affine(barretenberg::scalar_multiplication::pippenger(
                                              polys[0].get_coefficients(), prover.reference_string.monomials, prover.n),
                                          verifier.SIGMA_1);
-    barretenberg::g1::jacobian_to_affine(barretenberg::scalar_multiplication::pippenger(
+    barretenberg::g1::__jacobian_to_affine(barretenberg::scalar_multiplication::pippenger(
                                              polys[1].get_coefficients(), prover.reference_string.monomials, prover.n),
                                          verifier.SIGMA_2);
-    barretenberg::g1::jacobian_to_affine(barretenberg::scalar_multiplication::pippenger(
+    barretenberg::g1::__jacobian_to_affine(barretenberg::scalar_multiplication::pippenger(
                                              polys[2].get_coefficients(), prover.reference_string.monomials, prover.n),
                                          verifier.SIGMA_3);
-    // barretenberg::g1::jacobian_to_affine(mul_state[1].output, verifier.SIGMA_2);
-    // barretenberg::g1::jacobian_to_affine(mul_state[2].output, verifier.SIGMA_3);
+    // barretenberg::g1::__jacobian_to_affine(mul_state[1].output, verifier.SIGMA_2);
+    // barretenberg::g1::__jacobian_to_affine(mul_state[2].output, verifier.SIGMA_3);
 
-    // barretenberg::g1::jacobian_to_affine(mul_state[0].output, verifier.SIGMA_1);
-    // barretenberg::g1::jacobian_to_affine(mul_state[1].output, verifier.SIGMA_2);
-    // barretenberg::g1::jacobian_to_affine(mul_state[2].output, verifier.SIGMA_3);
+    // barretenberg::g1::__jacobian_to_affine(mul_state[0].output, verifier.SIGMA_1);
+    // barretenberg::g1::__jacobian_to_affine(mul_state[1].output, verifier.SIGMA_2);
+    // barretenberg::g1::__jacobian_to_affine(mul_state[2].output, verifier.SIGMA_3);
 
     verifier.reference_string = prover.reference_string.get_verifier_reference_string();
     // TODO: this whole method should be part of the class that owns prover.widgets

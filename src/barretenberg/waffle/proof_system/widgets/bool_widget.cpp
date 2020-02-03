@@ -144,7 +144,7 @@ std::unique_ptr<VerifierBaseWidget> ProverBoolWidget::compute_preprocessed_commi
 
     for (size_t i = 0; i < 3; ++i)
     {
-        g1::jacobian_to_affine(
+        g1::__jacobian_to_affine(
             scalar_multiplication::pippenger(polys[i].get_coefficients(), reference_string.monomials, domain.size),
             commitments[i]);
     }

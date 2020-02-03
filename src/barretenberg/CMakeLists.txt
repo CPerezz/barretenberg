@@ -35,6 +35,8 @@ add_library(
     curves/bn254/pairing.cpp
     curves/bn254/pairing.hpp
     curves/grumpkin/grumpkin.hpp
+    lagrange_base_transformation/lagrange_base.cpp
+    lagrange_base_transformation/lagrange_base.hpp
     io/io.hpp
     keccak/hash_types.h
     keccak/keccakf1600.c
@@ -148,6 +150,8 @@ if(PROFILING)
         curves/bn254/pairing.cpp
         curves/bn254/pairing.hpp
         curves/grumpkin/grumpkin.hpp
+        lagrange_base_transformation/lagrange_base.cpp
+        lagrange_base_transformation/lagrange_base.hpp
         io/io.hpp
         keccak/hash_types.h
         keccak/keccakf1600.c

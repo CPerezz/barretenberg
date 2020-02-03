@@ -112,7 +112,7 @@ template <typename coordinate_field, typename subgroup_field, typename GroupPara
         {
             element ele = random_element();
             affine_element out;
-            jacobian_to_affine(ele, out);
+            __jacobian_to_affine(ele, out);
             return out;
         }
     }
@@ -758,11 +758,18 @@ template <typename coordinate_field, typename subgroup_field, typename GroupPara
         return r;
     }
 
-    static inline void jacobian_to_affine(const element& a, affine_element& r)
+    static inline void __jacobian_to_affine(const element& a, affine_element& r)
     {
         element temp = normalize(a);
         coordinate_field::__copy(temp.x, r.x);
         coordinate_field::__copy(temp.y, r.y);
+    }
+
+    static inline affine_element jacobian_to_affine(const element& a, affine_element& r)
+    {
+        element temp = normalize(a);
+        affine_element res{ temp.x, temp.y };
+        return res;
     }
 
     static inline void copy_affine(const affine_element& a, affine_element& r)

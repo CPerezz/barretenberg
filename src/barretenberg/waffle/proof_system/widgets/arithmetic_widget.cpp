@@ -141,7 +141,7 @@ std::unique_ptr<VerifierBaseWidget> ProverArithmeticWidget::compute_preprocessed
 
     for (size_t i = 0; i < 5; ++i)
     {
-        g1::jacobian_to_affine(scalar_multiplication::pippenger(polys[i].get_coefficients(), reference_string.monomials, domain.size), commitments[i]);
+        g1::__jacobian_to_affine(scalar_multiplication::pippenger(polys[i].get_coefficients(), reference_string.monomials, domain.size), commitments[i]);
     }
     std::unique_ptr<VerifierBaseWidget> result = std::make_unique<VerifierArithmeticWidget>(commitments);
     return result;

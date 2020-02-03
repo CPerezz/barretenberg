@@ -65,9 +65,9 @@ void Prover::compute_wire_commitments()
     g1::element W_R = scalar_multiplication::pippenger(w_r.get_coefficients(), reference_string.monomials, n);
     g1::element W_O = scalar_multiplication::pippenger(w_o.get_coefficients(), reference_string.monomials, n);
 
-    g1::jacobian_to_affine(W_L, proof.W_L);
-    g1::jacobian_to_affine(W_R, proof.W_R);
-    g1::jacobian_to_affine(W_O, proof.W_O);
+    g1::__jacobian_to_affine(W_L, proof.W_L);
+    g1::__jacobian_to_affine(W_R, proof.W_R);
+    g1::__jacobian_to_affine(W_O, proof.W_O);
 
     // compute beta, gamma
     challenges.gamma = compute_gamma(proof);
@@ -77,7 +77,7 @@ void Prover::compute_wire_commitments()
 void Prover::compute_z_commitment()
 {
     g1::element Z = scalar_multiplication::pippenger(z.get_coefficients(), reference_string.monomials, n);
-    g1::jacobian_to_affine(Z, proof.Z_1);
+    g1::__jacobian_to_affine(Z, proof.Z_1);
 
     // compute alpha
     // TODO: does this really belong here?
@@ -93,9 +93,9 @@ void Prover::compute_quotient_commitment()
     g1::element T_HI = scalar_multiplication::pippenger(
         &circuit_state.quotient_large.get_coefficients()[n + n], reference_string.monomials, n);
 
-    g1::jacobian_to_affine(T_LO, proof.T_LO);
-    g1::jacobian_to_affine(T_MID, proof.T_MID);
-    g1::jacobian_to_affine(T_HI, proof.T_HI);
+    g1::__jacobian_to_affine(T_LO, proof.T_LO);
+    g1::__jacobian_to_affine(T_MID, proof.T_MID);
+    g1::__jacobian_to_affine(T_HI, proof.T_HI);
 
     challenges.z = compute_evaluation_challenge(proof);
 }
@@ -632,8 +632,8 @@ void Prover::compute_opening_elements()
     g1::element PI_Z_OMEGA =
         scalar_multiplication::pippenger(shifted_opening_poly.get_coefficients(), reference_string.monomials, n);
 
-    g1::jacobian_to_affine(PI_Z, proof.PI_Z);
-    g1::jacobian_to_affine(PI_Z_OMEGA, proof.PI_Z_OMEGA);
+    g1::__jacobian_to_affine(PI_Z, proof.PI_Z);
+    g1::__jacobian_to_affine(PI_Z_OMEGA, proof.PI_Z_OMEGA);
 }
 
 plonk_proof Prover::construct_proof()

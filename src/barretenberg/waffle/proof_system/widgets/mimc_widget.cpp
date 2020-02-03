@@ -136,7 +136,7 @@ std::unique_ptr<VerifierBaseWidget> ProverMiMCWidget::compute_preprocessed_commi
 
     for (size_t i = 0; i < 2; ++i)
     {
-        g1::jacobian_to_affine(scalar_multiplication::pippenger(polys[i].get_coefficients(), reference_string.monomials, domain.size), commitments[i]);
+        g1::__jacobian_to_affine(scalar_multiplication::pippenger(polys[i].get_coefficients(), reference_string.monomials, domain.size), commitments[i]);
     }
     std::unique_ptr<VerifierBaseWidget> result = std::make_unique<VerifierMiMCWidget>(commitments);
     return result;
