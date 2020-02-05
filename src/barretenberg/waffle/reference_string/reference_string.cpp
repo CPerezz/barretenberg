@@ -9,7 +9,7 @@
 
 namespace waffle
 {
-    ReferenceString::ReferenceString() : monomials(nullptr), precomputed_g2_lines(nullptr), degree(0) {}
+    ReferenceString::ReferenceString() : monomials(nullptr), lagrange(nullptr), precomputed_g2_lines(nullptr), degree(0) {}
 
 
     ReferenceString::ReferenceString(const size_t num_points)
@@ -18,9 +18,12 @@ namespace waffle
         if (num_points > 0)
         {
             monomials = (barretenberg::g1::affine_element*)(aligned_alloc(64, sizeof(barretenberg::g1::affine_element) * (2 * degree + 2)));
+            lagrange = (barretenberg::g1::affine_element*)(aligned_alloc(64, sizeof(barretenberg::g1::affine_element) * (2 * degree + 2)));
             precomputed_g2_lines = (barretenberg::pairing::miller_lines*)(aligned_alloc(64, sizeof(barretenberg::pairing::miller_lines) * 2));
             barretenberg::io::read_transcript(monomials, g2_x, degree, BARRETENBERG_SRS_PATH);
+            barretenberg::io::read_transcript(lagrange, g2_x, degree, BARRETENBERG_LAGRANGE_SRS_PATH);
             barretenberg::scalar_multiplication::generate_pippenger_point_table(monomials, monomials, degree);
+            barretenberg::scalar_multiplication::generate_pippenger_point_table(lagrange, lagrange, degree);
 
             barretenberg::g2::element g2_x_jac;
             barretenberg::g2::affine_to_jacobian(g2_x, g2_x_jac);
@@ -30,27 +33,36 @@ namespace waffle
         else
         {
             monomials = nullptr;
+            lagrange = nullptr;
             precomputed_g2_lines = nullptr;
         }
+
     }
 
     ReferenceString::ReferenceString(const ReferenceString &other) : degree(other.degree)
     {
         monomials = (barretenberg::g1::affine_element*)(aligned_alloc(64, sizeof(barretenberg::g1::affine_element) * (2 * degree + 2)));
+        lagrange = (barretenberg::g1::affine_element*)(aligned_alloc(64, sizeof(barretenberg::g1::affine_element) * (2 * degree + 2)));
         precomputed_g2_lines = (barretenberg::pairing::miller_lines*)(aligned_alloc(64, sizeof(barretenberg::pairing::miller_lines) * 2));
 
         memcpy(static_cast<void*>(monomials), static_cast<void*>(other.monomials), sizeof(barretenberg::g1::affine_element) * (2 * degree));
+        memcpy(static_cast<void*>(lagrange), static_cast<void*>(other.lagrange), sizeof(barretenberg::g1::affine_element) * (2 * degree));
         memcpy(static_cast<void*>(precomputed_g2_lines), static_cast<void*>(other.precomputed_g2_lines), sizeof(barretenberg::pairing::miller_lines) * 2);
 
         barretenberg::g2::copy_affine(other.g2_x, g2_x);
     }
 
-    ReferenceString::ReferenceString(ReferenceString &&other) : monomials(nullptr), precomputed_g2_lines(nullptr), degree(other.degree)
+    ReferenceString::ReferenceString(ReferenceString &&other) : monomials(nullptr), lagrange(nullptr), precomputed_g2_lines(nullptr), degree(other.degree)
     {
         if (other.monomials != nullptr)
         {
             monomials = other.monomials;
             other.monomials = nullptr;
+        }
+        if (other.lagrange != nullptr)
+        {
+            lagrange = other.lagrange;
+            other.lagrange = nullptr;
         }
         if (other.precomputed_g2_lines != nullptr)
         {
@@ -68,6 +80,11 @@ namespace waffle
             aligned_free(monomials);
             monomials = nullptr;
         }
+        if (lagrange != nullptr)
+        {
+            aligned_free(lagrange);
+            lagrange = nullptr;
+        }
         if (precomputed_g2_lines != nullptr)
         {
             aligned_free(precomputed_g2_lines);
@@ -77,9 +94,11 @@ namespace waffle
         degree = other.degree;
 
         monomials = (barretenberg::g1::affine_element *)(aligned_alloc(64, sizeof(barretenberg::g1::affine_element) * (2 * degree + 2)));
+        lagrange = (barretenberg::g1::affine_element *)(aligned_alloc(64, sizeof(barretenberg::g1::affine_element) * (2 * degree + 2)));
         precomputed_g2_lines = (barretenberg::pairing::miller_lines *)(aligned_alloc(64, sizeof(barretenberg::pairing::miller_lines) * 2));
 
         memcpy(static_cast<void *>(monomials), static_cast<void *>(other.monomials), sizeof(barretenberg::g1::affine_element) * (2 * degree));
+        memcpy(static_cast<void *>(lagrange), static_cast<void *>(other.lagrange), sizeof(barretenberg::g1::affine_element) * (2 * degree));
         memcpy(static_cast<void *>(precomputed_g2_lines), static_cast<void *>(other.precomputed_g2_lines), sizeof(barretenberg::pairing::miller_lines) * 2);
 
         barretenberg::g2::copy_affine(other.g2_x, g2_x);
@@ -93,6 +112,11 @@ namespace waffle
             aligned_free(monomials);
             monomials = nullptr;
         }
+        if (lagrange != nullptr)
+        {
+            aligned_free(lagrange);
+            lagrange = nullptr;
+        }
         if (precomputed_g2_lines != nullptr)
         {
             aligned_free(precomputed_g2_lines);
@@ -105,6 +129,11 @@ namespace waffle
         {
             monomials = other.monomials;
             other.monomials = nullptr;
+        }
+        if (other.lagrange != nullptr)
+        {
+            lagrange = other.lagrange;
+            other.lagrange = nullptr;
         }
         if (other.precomputed_g2_lines != nullptr)
         {
@@ -122,6 +151,10 @@ namespace waffle
         if (monomials != nullptr)
         {
             aligned_free(monomials);
+        }
+        if (lagrange != nullptr)
+        {
+            aligned_free(lagrange);
         }
         if (precomputed_g2_lines != nullptr)
         {

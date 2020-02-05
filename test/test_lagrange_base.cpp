@@ -113,3 +113,4 @@ TEST(lagrange_base, verify_lagrange_base_transformation_on_rand_poly)
 
     EXPECT_EQ(g1::eq(result, expected), true);
 }
+

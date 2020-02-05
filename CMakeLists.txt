@@ -95,6 +95,7 @@ if(WIN32)
 endif()
 
 add_definitions(-DBOOST_SPIRIT_X3_NO_FILESYSTEM=1 -DBARRETENBERG_SRS_PATH=\"../srs_db/transcript.dat\")
+add_definitions(-DBOOST_SPIRIT_X3_NO_FILESYSTEM=1 -DBARRETENBERG_LAGRANGE_SRS_PATH=\"../srs_db/lagrange_srs.dat\")
 
 set(private_include_dir ${PROJECT_SOURCE_DIR}/src)
 set(DEPENDS_DIR ${PROJECT_SOURCE_DIR}/depends)

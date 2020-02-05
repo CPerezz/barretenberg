@@ -26,6 +26,7 @@ public:
 
     barretenberg::g1::affine_element *monomials;
     barretenberg::g2::affine_element g2_x;
+    barretenberg::g1::affine_element *lagrange;
 
     barretenberg::pairing::miller_lines *precomputed_g2_lines;
 
