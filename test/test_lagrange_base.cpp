@@ -66,7 +66,7 @@ TEST(lagrange_base, verify_lagrange_base_transformation)
 
 TEST(lagrange_base, verify_lagrange_base_transformation_on_rand_poly)
 {
-    constexpr size_t degree = 2;
+    constexpr size_t degree = 64;
     // step 1: create monomial base srs
     // step 2: create lagrange base srs
 
@@ -93,7 +93,7 @@ TEST(lagrange_base, verify_lagrange_base_transformation_on_rand_poly)
 
     barretenberg::evaluation_domain domain(degree);
     domain.compute_lookup_table();
-
+//    std::swap(lagrange_base_srs[0], lagrange_base_srs[1]);
     barretenberg::polynomial test_polynomial(degree);
     test_polynomial[0] = fr::random_element();
     for (size_t i = 1; i < degree; ++i)

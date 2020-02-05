@@ -6,7 +6,7 @@ namespace lagrange_base {
 std::vector<g1::element> g1fft(const g1::element* monomials, size_t size, barretenberg::fr::field_t root, size_t offset)
 {
 
-        std::cout << "size:" << size << std::endl;
+    std::cout << "size:" << size << std::endl;
     std::vector<g1::element> result(size);
     if (size == 1) {
         result[0] = monomials[0];
@@ -16,7 +16,7 @@ std::vector<g1::element> g1fft(const g1::element* monomials, size_t size, barret
     auto new_root = fr::mul(root, root);
     auto odd = g1fft(monomials + offset, size / 2, new_root, offset * 2);
     auto even = g1fft(monomials, size / 2, new_root, offset * 2);
-        std::cout << "size:" << size << std::endl;
+    std::cout << "size:" << size << std::endl;
     auto current = root;
 
     for (size_t i = 0; i < size / 2; ++i) {
@@ -43,11 +43,12 @@ void transform_srs(g1::affine_element* monomials, g1::affine_element* lagrange_b
     }
 
     auto lagrange_jac = g1fft(&monomials_jac[0], degree, root, 1);
-    for (size_t i = 0; i < degree; ++i) {
+    for (size_t i = 0; i < degree - 1; ++i) {
         lagrange_jac[i] = g1::group_exponentiation(lagrange_jac[i], domain.domain_inverse);
-        g1::__jacobian_to_affine(lagrange_jac[i], lagrange_base_affine[i]);
+        g1::__jacobian_to_affine(lagrange_jac[i], lagrange_base_affine[i+1]);
     }
-
+    lagrange_jac[degree-1] = g1::group_exponentiation(lagrange_jac[degree-1], domain.domain_inverse);
+    g1::__jacobian_to_affine(lagrange_jac[degree-1], lagrange_base_affine[0]);
     /*
         for (size_t i = 0; i < domain.log2_size; ++i) {
             domain.lagrange_base[i] = g1::group_exponentiation(monomials[0], n_inv);
