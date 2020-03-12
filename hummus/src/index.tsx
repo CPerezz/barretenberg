@@ -27,6 +27,14 @@ async function main() {
 
   console.log(verified);
 
+  console.log('Starting field muls...');
+  const start = Date.now();
+  barretenberg.exports().do_n_muls(10000000, 0);
+  const result = Buffer.from(barretenberg.getMemory().slice(0, 32));
+  const duration = Date.now() - start;
+  console.log(result);
+  console.log('Time: ', duration);
+
   ReactDOM.render(<p/>, document.getElementById('root'));
 }
 
